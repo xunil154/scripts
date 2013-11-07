@@ -44,6 +44,7 @@ if($pid) {
 		if($_ =~ "thinkpad_acpi: undocked"){
 			my $now = int(`date +%s`);
 			if($now - $start_time > 5){
+				my $output = `/usr/local/src/undocked.sh`;
 				my $output = `/usr/bin/xscreensaver-command -lock`;
 			}
 		}
@@ -54,9 +55,21 @@ if($pid) {
 			}
 		}
 		elsif($_ =~ m/UFW BLOCK.*SRC=([^\s]_).*DST=([^\s]_).*PROTO=([^\s]+).*SPT=([^\s]+).*DPT=([^\s]+).*/){
-			my $cmd = "notify-send 'BLOCK: $1:$3-> $2:$4'";
+			my $cmd = "notify-send 'BLOCK' 'From: $1:$3\\nTo:      $2:$4'";
 			my $results = `$cmd`;
 		}
+elsif ( $_ =~ m/UFW BLOCK.*SRC=([^ ]+).*DST=([^ ]+).*/){
+	my ($src,$dest) = ($1, $2);
+	if ( $_ =~ m/UFW BLOCK.*SRC=([^ ]+).*DST=([^ ]+).*PROTO=([^ ]+).*SPT=([^ ]+).*DPT=([^ ]+).*/){
+		my $cmd = "notify-send 'BLOCK: $1:$4 -> $2:$5'";
+			my $cmd = "notify-send 'BLOCK' 'From: $1:$4\\nTo:      $2:$5'";
+		my $results = `$cmd`;
+	}else{
+		my $cmd = "notify-send 'BLOCK' 'From: $src \\nTo:      $dest'";
+		my $results = `$cmd`;
+	}
+}
+
 	}
 }
 
