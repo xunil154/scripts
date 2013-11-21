@@ -31,6 +31,7 @@ if(! -e $FIFO_FILE){
 my $start_time = int(`date +%s`);
 
 my $pid = fork();
+my $cmd = "";
 if($pid) {
 	$SIG{'INT'} = 'CLEANUP';
 	$SIG{__DIE__} = 'CLEANUP';
@@ -55,17 +56,17 @@ if($pid) {
 			}
 		}
 		elsif($_ =~ m/UFW BLOCK.*SRC=([^\s]_).*DST=([^\s]_).*PROTO=([^\s]+).*SPT=([^\s]+).*DPT=([^\s]+).*/){
-			my $cmd = "notify-send 'BLOCK' 'From: $1:$3\\nTo:      $2:$4'";
+			$cmd = "notify-send 'BLOCK' 'From: $1:$3\\nTo:      $2:$4'";
 			my $results = `$cmd`;
 		}
 elsif ( $_ =~ m/UFW BLOCK.*SRC=([^ ]+).*DST=([^ ]+).*/){
 	my ($src,$dest) = ($1, $2);
 	if ( $_ =~ m/UFW BLOCK.*SRC=([^ ]+).*DST=([^ ]+).*PROTO=([^ ]+).*SPT=([^ ]+).*DPT=([^ ]+).*/){
-		my $cmd = "notify-send 'BLOCK: $1:$4 -> $2:$5'";
-			my $cmd = "notify-send 'BLOCK' 'From: $1:$4\\nTo:      $2:$5'";
+		#$cmd = "notify-send 'BLOCK: $1:$4 -> $2:$5'";
+		$cmd = "notify-send 'BLOCK' 'From: $1:$4\\nTo:      $2:$5'";
 		my $results = `$cmd`;
 	}else{
-		my $cmd = "notify-send 'BLOCK' 'From: $src \\nTo:      $dest'";
+		$cmd = "notify-send 'BLOCK' 'From: $src \\nTo:      $dest'";
 		my $results = `$cmd`;
 	}
 }
