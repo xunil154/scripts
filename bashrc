@@ -10,6 +10,7 @@ export PATH=$PATH:/opt/android-sdk/tools
 alias ls='ls --color=auto'
 alias sl='ls'
 alias grep='grep --color'
+alias tmux='tmux -2 '
 
 alias phone_connect='mtp-connect'
 alias phone_mount='go-mtpfs ~/phone'
@@ -47,8 +48,8 @@ function build_prompt(){
 build_prompt
 export PS1="$prompt" # None 
 
-term='xterm'
-TERM='xterm'
+export term='xterm-256color'
+export TERM='xterm-256color'
 
 
 export bash_id=$(cat ~/.bash_id)
